@@ -1,0 +1,37 @@
+properties:
+  managedEnvironmentId: "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.App/managedEnvironments/{environment-name}"
+  configuration:
+    ingress:
+      external: true
+      targetPort: 8080
+      allowInsecure: false
+      traffic:
+        - latestRevision: true
+          weight: 100
+    registries:
+      - server: "{acr-name}.azurecr.io"
+        username: "{acr-username}"
+        passwordSecretRef: "acr-password"
+    secrets:
+      - name: "acr-password"
+        value: "{acr-password}"
+      - name: "azure-client-id"
+        value: "{client-id}"
+      - name: "azure-client-secret"
+        value: "{client-secret}" 
+      - name: "azure-tenant-id"
+        value: "{tenant-id}"
+  template:
+    containers:
+      - image: "{acr-name}.azurecr.io/spring-azure-container-app:latest"
+        name: spring-azure-container-app
+        env:
+          - name: "AZURE_CLIENT_ID"
+            secretRef: "azure-client-id"
+          - name: "AZURE_CLIENT_SECRET"
+            secretRef: "azure-client-secret"
+          - name: "AZURE_TENANT_ID"
+            secretRef: "azure-tenant-id"
+        resources:
+          cpu: 0.5
+          memory: "1Gi"

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5" th:text="${message}">User Profile</h1>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4>Your Azure Entra ID Profile</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${userInfo}">
+                    <div class="row mb-2">
+                        <div class="col-md-3 font-weight-bold">Name:</div>
+                        <div class="col-md-9" th:text="${userInfo.name}">John Doe</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 font-weight-bold">Email:</div>
+                        <div class="col-md-9" th:text="${userInfo.email}">john.doe@example.com</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 font-weight-bold">Subject (ID):</div>
+                        <div class="col-md-9" th:text="${userInfo.sub}">user-id</div>
+                    </div>
+                    <hr />
+                    <h5>All Claims:</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Claim</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="claim : ${userInfo}">
+                                <td th:text="${claim.key}">claim-name</td>
+                                <td th:text="${claim.value}">claim-value</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:unless="${userInfo}" class="alert alert-warning">
+                    You are not logged in or no user information is available.
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

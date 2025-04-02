@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Azure Container Apps</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron mt-5">
+            <h1 class="display-4">Welcome to Azure Container Apps</h1>
+            <p class="lead">This is a sample application demonstrating Azure Container Apps and managing access and identity with Azure Entra ID.</p>
+            <hr class="my-4">
+            <p>Learn how to deploy containerized applications to Azure and integrate with Azure Entra ID for authentication and authorization.</p>
+            
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/oauth2/authorization/azure}" class="btn btn-primary">Login with Azure Entra ID</a>
+            </div>
+            
+            <div sec:authorize="isAuthenticated()">
+                <p>Welcome, <span sec:authentication="name">Username</span>!</p>
+                <a th:href="@{/profile}" class="btn btn-primary">View Profile</a>
+                <a th:href="@{/logout}" class="btn btn-secondary ml-2">Logout</a>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Azure Container Apps</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Azure Container Apps is a fully managed serverless container offering for building and deploying modern applications at scale.</p>
+                        <a href="https://learn.microsoft.com/azure/container-apps/" class="btn btn-info" target="_blank">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Azure Entra ID</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Azure Entra ID (formerly known as Azure Active Directory) is Microsoft's cloud-based identity and access management service.</p>
+                        <a href="https://learn.microsoft.com/azure/active-directory/" class="btn btn-info" target="_blank">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

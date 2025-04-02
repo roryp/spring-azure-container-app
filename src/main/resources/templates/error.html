@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Azure Container App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .error-container {
+            padding: 40px 0;
+        }
+        .error-image {
+            width: 100px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container error-container text-center">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <svg class="error-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path fill="#dc3545" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"/>
+                </svg>
+                
+                <h1 class="h3 mb-3 font-weight-bold" th:text="${status} + ' - ' + ${error}">500 - Error</h1>
+                
+                <div class="alert alert-danger mb-4">
+                    <p th:text="${message}">An unexpected error occurred while processing your request.</p>
+                    <p th:if="${exception}" class="mt-2 mb-0">
+                        <small th:text="'Error details: ' + ${exception.message}">Error details</small>
+                    </p>
+                </div>
+                
+                <p class="text-muted mb-4">
+                    <small th:text="'Timestamp: ' + ${timestamp}">Timestamp</small>
+                </p>
+                
+                <a href="/" class="btn btn-primary">Return to Home Page</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
