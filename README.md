@@ -1,3 +1,5 @@
+![UML](uml.png)
+
 # Spring Boot Azure Container App with Entra ID
 
 This project demonstrates how to build and deploy a Spring Boot application to Azure Container Apps with Azure Entra ID (formerly Azure Active Directory) integration for authentication and authorization.
