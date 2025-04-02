@@ -24,34 +24,51 @@
     </properties>
 
     <dependencies>
+        <!-- Spring Web: Core dependency for building web applications -->
+        <!-- Provides controllers, REST endpoints, and web server -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- Spring Security: Authentication and authorization framework -->
+        <!-- Provides security filter chain, authentication providers, etc. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!-- OAuth2 Client: Supports logging into the app as an OAuth client -->
+        <!-- Used for the Azure Entra ID login integration -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
+        <!-- OAuth2 Resource Server: Enables validating tokens in API requests -->
+        <!-- Allows the app to act as a protected resource server -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+        <!-- Azure Entra ID (formerly Azure Active Directory) integration -->
+        <!-- Provides authentication and authorization with Azure Entra ID -->
+        <!-- Uses client credentials flow (not managed identities) -->
         <dependency>
             <groupId>com.azure.spring</groupId>
             <artifactId>spring-cloud-azure-starter-active-directory</artifactId>
         </dependency>
+        <!-- Thymeleaf templating engine for server-side HTML rendering -->
+        <!-- Used for the web UI pages (index, profile, error) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <!-- Integration between Thymeleaf and Spring Security -->
+        <!-- Provides security tags like sec:authorize in the templates -->
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
+        <!-- Testing framework for Spring Boot applications -->
+        <!-- Provides JUnit integration and testing utilities -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -61,6 +78,8 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Azure Spring integration dependency management -->
+            <!-- Manages versions of all Azure Spring libraries -->
             <dependency>
                 <groupId>com.azure.spring</groupId>
                 <artifactId>spring-cloud-azure-dependencies</artifactId>
@@ -73,6 +92,9 @@
 
     <build>
         <plugins>
+            <!-- Spring Boot Maven Plugin -->
+            <!-- Packages the application as an executable JAR -->
+            <!-- Enables Spring Boot-specific features during build -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
