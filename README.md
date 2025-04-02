@@ -25,12 +25,12 @@ This project demonstrates how to build and deploy a Spring Boot application to A
 ## Deployment Summary
 
 ### Deployment Details
-- Azure Container Registry: `your-app.azurecr.io`
+- Azure Container Registry: `{acr-name}.azurecr.io`
 - Azure Container App Name: `spring-azure-container-app`
-- Resource Group: `sarcastic`
-- Container App Environment: `evi-next-js-app-env`
-- Azure Entra ID Application ID: `b8655955-de2f-4cea-a84d-98f2f59cdec2`
-- Redirect URI: `https://your-app.azurecontainerapps.io/login/oauth2/code/azure`
+- Resource Group: `{resource-group-name}`
+- Container App Environment: `{container-app-env-name}`
+- Azure Entra ID Application ID: `{application-id}`
+- Redirect URI: `https://{your-app}.azurecontainerapps.io/login/oauth2/code/azure`
 
 ### Deployment Process
 
@@ -43,23 +43,23 @@ The application was deployed using the following steps:
 
 2. Built the Docker image using the provided Dockerfile:
    ```bash
-   docker build -t your-app.azurecr.io/spring-azure-container-app:latest .
+   docker build -t {acr-name}.azurecr.io/spring-azure-container-app:latest .
    ```
 
 3. Pushed the Docker image to Azure Container Registry:
    ```bash
-   az acr login --name sarcasmvsrpza
-   docker push your-app.azurecr.io/spring-azure-container-app:latest
+   az acr login --name {acr-name}
+   docker push {acr-name}.azurecr.io/spring-azure-container-app:latest
    ```
 
 4. Created and deployed the Azure Container App using the configuration in `azure-container-app.yaml`:
    ```bash
-   az containerapp create --resource-group sarcastic --name spring-azure-container-app --yaml azure-container-app.yaml
+   az containerapp create --resource-group {resource-group-name} --name spring-azure-container-app --yaml azure-container-app.yaml
    ```
 
 5. Updated the redirect URI in Azure Entra ID application registration to fix authentication issues:
    ```bash
-   az ad app update --id your-app --web-redirect-uris https://your-app.azurecontainerapps.io/login/oauth2/code/azure
+   az ad app update --id {application-id} --web-redirect-uris https://{your-app}.azurecontainerapps.io/login/oauth2/code/azure
    ```
 
 ### Common Issues and Resolutions
@@ -91,7 +91,7 @@ The project includes scripts to automatically create the necessary Azure Entra I
 ./Create-AzureEntraAppRegistration.ps1 -AppName "spring-azure-container-app"
 
 # If you want to specify a production redirect URI as well
-./Create-AzureEntraAppRegistration.ps1 -AppName "spring-azure-container-app" -RedirectUriProduction "https://your-app.azurecontainerapps.io/login/oauth2/code/azure"
+./Create-AzureEntraAppRegistration.ps1 -AppName "spring-azure-container-app" -RedirectUriProduction "https://{your-app}.azurecontainerapps.io/login/oauth2/code/azure"
 ```
 
 #### For Linux/macOS:
@@ -104,7 +104,7 @@ chmod +x create-azure-entra-app-registration.sh
 ./create-azure-entra-app-registration.sh --app-name "spring-azure-container-app"
 
 # If you want to specify a production redirect URI as well
-./create-azure-entra-app-registration.sh --app-name "spring-azure-container-app" --redirect-uri-production "https://your-app.azurecontainerapps.io/login/oauth2/code/azure"
+./create-azure-entra-app-registration.sh --app-name "spring-azure-container-app" --redirect-uri-production "https://{your-app}.azurecontainerapps.io/login/oauth2/code/azure"
 ```
 
 The script will:
@@ -158,7 +158,7 @@ If you encounter authentication issues such as "500 Internal Server Error" or "A
    REM Fix Azure Entra ID redirect URI registration
 
    echo Setting up variables...
-   set APP_ID=your-client-id
+   set APP_ID={your-client-id}
    set REDIRECT_URI=http://localhost:8080/login/oauth2/code/azure
 
    echo Logging in to Azure...
@@ -175,8 +175,8 @@ If you encounter authentication issues such as "500 Internal Server Error" or "A
 
    echo Setting environment variables for the application...
    set AZURE_CLIENT_ID=%APP_ID%
-   set AZURE_CLIENT_SECRET=your-client-secret
-   set AZURE_TENANT_ID=your-tenant-id
+   set AZURE_CLIENT_SECRET={your-client-secret}
+   set AZURE_TENANT_ID={your-tenant-id}
 
    echo Azure environment variables set:
    echo AZURE_CLIENT_ID=%AZURE_CLIENT_ID%
@@ -190,9 +190,9 @@ If you encounter authentication issues such as "500 Internal Server Error" or "A
    ```
 
 2. Replace the placeholders:
-   - `your-client-id` with your Azure Entra ID application client ID
-   - `your-client-secret` with your application client secret
-   - `your-tenant-id` with your Azure tenant ID
+   - `{your-client-id}` with your Azure Entra ID application client ID
+   - `{your-client-secret}` with your application client secret
+   - `{your-tenant-id}` with your Azure tenant ID
 
 3. Run the batch file: 
    ```
@@ -206,14 +206,14 @@ If you're having issues with environment variables not being properly set, creat
 ```batch
 @echo off
 REM Setting Azure Entra ID environment variables
-set AZURE_CLIENT_ID=your-client-id
-set AZURE_CLIENT_SECRET=your-client-secret
-set AZURE_TENANT_ID=your-tenant-id
+set AZURE_CLIENT_ID={your-client-id}
+set AZURE_CLIENT_SECRET={your-client-secret}
+set AZURE_TENANT_ID={your-tenant-id}
 
 REM Display the variables to confirm they're set
 echo Azure environment variables set:
 echo AZURE_CLIENT_ID=%AZURE_CLIENT_ID%
-echo AZURE_CLIENT_SECRET=%AZURE_CLIENT_SECRET%
+echo AZURE_CLIENT_SECRET=[HIDDEN]
 echo AZURE_TENANT_ID=%AZURE_TENANT_ID%
 
 REM Run the application with Maven
@@ -408,20 +408,20 @@ docker-compose up --build
    ```bash
    az containerapp create \
      --name spring-azure-container-app \
-     --resource-group <resource-group> \
-     --environment <environment-name> \
-     --image <acr-name>.azurecr.io/spring-azure-container-app:latest \
+     --resource-group {resource-group} \
+     --environment {environment-name} \
+     --image {acr-name}.azurecr.io/spring-azure-container-app:latest \
      --target-port 8080 \
      --ingress external \
-     --registry-server <acr-name>.azurecr.io \
-     --registry-username <acr-username> \
-     --registry-password <acr-password> \
-     --env-vars AZURE_CLIENT_ID=<client-id> AZURE_CLIENT_SECRET=<client-secret> AZURE_TENANT_ID=<tenant-id>
+     --registry-server {acr-name}.azurecr.io \
+     --registry-username {acr-username} \
+     --registry-password {acr-password} \
+     --env-vars AZURE_CLIENT_ID={client-id} AZURE_CLIENT_SECRET={client-secret} AZURE_TENANT_ID={tenant-id}
    ```
 
 3. Update the redirect URI in your Azure Entra ID application registration to include your Container App URL:
    - Navigate to Azure Portal → Azure Entra ID → App registrations → Your app → Authentication
-   - Add a new redirect URI: `https://<container-app-url>/login/oauth2/code/azure`
+   - Add a new redirect URI: `https://{container-app-url}/login/oauth2/code/azure`
    - Click Save
 
 ## CI/CD with Azure Pipelines
