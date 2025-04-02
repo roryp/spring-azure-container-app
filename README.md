@@ -4,6 +4,28 @@
 
 This project demonstrates how to build and deploy a Spring Boot application to Azure Container Apps with Azure Entra ID (formerly Azure Active Directory) integration for authentication and authorization.
 
+## Authentication Flow
+
+The UML diagram at the top of this README illustrates the authentication flow between the application and Azure Entra ID. Here's how it works:
+
+1. **Initiating Authentication**: When a user clicks the "Login with Azure Entra ID" button (`<a th:href="@{/oauth2/authorization/azure}" class="btn btn-primary">Login with Azure Entra ID</a>`) in the index.html page, this triggers Spring Security's OAuth2 client mechanism.
+
+2. **Redirection to Azure Entra ID**: Spring Security processes the `/oauth2/authorization/azure` path (standard OAuth2 client path where "azure" is the registration ID), and redirects the user to Azure Entra ID's authorization endpoint configured in the application.yml.
+
+3. **Azure Authentication**: The user authenticates with their Azure Entra ID credentials directly on Microsoft's authentication page.
+
+4. **Token Issuance**: After successful authentication, Azure Entra ID issues an authorization code and redirects back to the application's configured redirect URI (`/login/oauth2/code/azure`).
+
+5. **Token Exchange**: Spring Security exchanges this authorization code for access and ID tokens by calling Azure Entra ID's token endpoint.
+
+6. **User Session Creation**: Spring Security creates a user session using the received tokens and populates the SecurityContext with the authenticated user details.
+
+7. **Redirection to Success URL**: The user is redirected to the `/profile` page as specified in the `defaultSuccessUrl("/profile", true)` setting in SecurityConfig.java.
+
+8. **Protected Resources Access**: For subsequent requests to protected resources or Microsoft Graph API, the UserService uses the stored tokens to authorize requests.
+
+This OAuth2 flow is entirely managed by Spring Security's OAuth2 client support, with the configuration defined in application.yml and SecurityConfig.java. No custom code is needed to handle the basic authentication flow.
+
 ## Features
 
 - Spring Boot 3 application with Spring Security
