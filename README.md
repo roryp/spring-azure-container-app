@@ -24,18 +24,13 @@ This project demonstrates how to build and deploy a Spring Boot application to A
 
 ## Deployment Summary
 
-This project has been successfully deployed to Azure Container Apps. The deployment can be accessed at:
-```
-https://spring-azure-container-app.delightfulgrass-8f3f406a.eastus2.azurecontainerapps.io/
-```
-
 ### Deployment Details
-- Azure Container Registry: `sarcasmvsrpza.azurecr.io`
+- Azure Container Registry: `your-app.azurecr.io`
 - Azure Container App Name: `spring-azure-container-app`
 - Resource Group: `sarcastic`
 - Container App Environment: `evi-next-js-app-env`
 - Azure Entra ID Application ID: `b8655955-de2f-4cea-a84d-98f2f59cdec2`
-- Redirect URI: `https://spring-azure-container-app.delightfulgrass-8f3f406a.eastus2.azurecontainerapps.io/login/oauth2/code/azure`
+- Redirect URI: `https://your-app.azurecontainerapps.io/login/oauth2/code/azure`
 
 ### Deployment Process
 
@@ -48,13 +43,13 @@ The application was deployed using the following steps:
 
 2. Built the Docker image using the provided Dockerfile:
    ```bash
-   docker build -t sarcasmvsrpza.azurecr.io/spring-azure-container-app:latest .
+   docker build -t your-app.azurecr.io/spring-azure-container-app:latest .
    ```
 
 3. Pushed the Docker image to Azure Container Registry:
    ```bash
    az acr login --name sarcasmvsrpza
-   docker push sarcasmvsrpza.azurecr.io/spring-azure-container-app:latest
+   docker push your-app.azurecr.io/spring-azure-container-app:latest
    ```
 
 4. Created and deployed the Azure Container App using the configuration in `azure-container-app.yaml`:
@@ -64,7 +59,7 @@ The application was deployed using the following steps:
 
 5. Updated the redirect URI in Azure Entra ID application registration to fix authentication issues:
    ```bash
-   az ad app update --id b8655955-de2f-4cea-a84d-98f2f59cdec2 --web-redirect-uris https://spring-azure-container-app.delightfulgrass-8f3f406a.eastus2.azurecontainerapps.io/login/oauth2/code/azure
+   az ad app update --id your-app --web-redirect-uris https://your-app.azurecontainerapps.io/login/oauth2/code/azure
    ```
 
 ### Common Issues and Resolutions
