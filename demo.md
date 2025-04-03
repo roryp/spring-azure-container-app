@@ -1,4 +1,4 @@
-I'll provide a step-by-step guide for demonstrating the code in this Spring Boot Azure Container App with Entra ID integration:
+Step-by-step guide for demonstrating the code in this Spring Boot Azure Container App with Entra ID integration:
 
 ## Step-by-Step Code Demo
 
@@ -43,5 +43,3 @@ I'll provide a step-by-step guide for demonstrating the code in this Spring Boot
 11. **Azure Deployment (if already deployed)**
     - Show the application running in Azure Container Apps.
     - Highlight the same authentication flow in the cloud environment.
-
-This demonstration showcases the complete authentication flow using Azure Entra ID integration in a Spring Boot application, including local development, containerization, and cloud deployment aspects.
