@@ -4,6 +4,83 @@
 
 This project demonstrates how to build and deploy a Spring Boot application to Azure Container Apps with Azure Entra ID (formerly Azure Active Directory) integration for authentication and authorization.
 
+## Demo Code Examples
+
+### Security Configuration
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            // Set public and protected routes
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/", "/index.html", "/error/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            // Azure Entra ID integration
+            .oauth2Login(oauth2 -> oauth2
+                .defaultSuccessUrl("/profile", true)
+            );
+        return http.build();
+    }
+}
+```
+
+### User Authentication Controller
+```java
+@Controller
+public class HomeController {
+    @GetMapping("/profile")
+    public String getProfile(Model model, @AuthenticationPrincipal OidcUser principal) {
+        // Extract OIDC claims from authenticated user
+        Map<String, Object> userInfo = principal.getClaims();
+        model.addAttribute("userInfo", userInfo);
+        return "profile";
+    }
+}
+```
+
+### Microsoft Graph Integration
+```java
+@Service
+public class UserService {
+    public Map<String, Object> getUserInfo() {
+        // Get current authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            // Get access token for Microsoft Graph API
+            String accessToken = client.getAccessToken().getTokenValue();
+            
+            // Call Microsoft Graph API
+            return restTemplate.exchange(
+                "https://graph.microsoft.com/v1.0/me", 
+                HttpMethod.GET,
+                new HttpEntity<>("", headers), 
+                Map.class).getBody();
+        }
+    }
+}
+```
+
+### Application Properties
+```yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          azure:
+            client-id: ${AZURE_CLIENT_ID}
+            client-secret: ${AZURE_CLIENT_SECRET}
+            scope: openid, profile, email
+        provider:
+          azure:
+            issuer-uri: https://login.microsoftonline.com/${AZURE_TENANT_ID}/v2.0
+```
+
 ## Authentication Flow
 
 The UML diagram at the top of this README illustrates the authentication flow between the application and Azure Entra ID. Here's how it works:
